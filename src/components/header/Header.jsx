@@ -9,7 +9,7 @@ export const Header = ({ onToggle }) => {
     <header>
       <Container>
         <h1>ReactMeals </h1>
-        <OrderBasket   onToggle={onToggle}> Your card</OrderBasket>
+        <OrderBasket   onToggle={onToggle}> Your Сart</OrderBasket>
       </Container>
     </header>
   );
