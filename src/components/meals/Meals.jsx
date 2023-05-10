@@ -1,16 +1,27 @@
-import React from "react";
-import { product } from "../utils/constants";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { MealSummaryCard } from "./MealSummaryCard";
 import { MealsItem } from "./MealsItem";
 
 export const Meals = () => {
+  const [meals,setMeals]=useState()
+  const BASE_URL =
+    "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
+
+   async function getFoods(){
+    const response= await fetch(`${BASE_URL}/foods`);
+    const data = await response.json()
+    setMeals(data.data)
+  }
+  useEffect(()=>{
+    getFoods()
+  },[])
   return (
     <>
       <MealSummaryCard />
       <Container>
-        {product.map((meal)=>(
-          <MealsItem key={meal.id} meal={meal} />
+        {meals?.map((meal) => (
+          <MealsItem key={meal._id} meal={meal} />
         ))}
       </Container>
     </>

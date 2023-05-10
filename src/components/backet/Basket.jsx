@@ -7,19 +7,20 @@ import styled from "styled-components";
 import { CartContext } from "../../store/cart-context";
 
 export const Basket = ({ onToggle }) => {
-  const { cartItems, getTotalAmount } = useContext(CartContext);
+  
+  const { cartState, getTotalAmount } = useContext(CartContext);
 
   return (
     <Modal onClose={onToggle}>
       <Content>
-        {DUMMY_ITEMS.length ? (
+        {cartState?.length ? (
           <FixedWidthContainer>
-            {cartItems.map((item) => (
+            {cartState?.map((item) => (
               <BasketItem
                 title={item.title}
                 price={item.price}
                 amount={item.amount}
-                id={item.id}
+                id={item._id}
                 key={item.id}
               />
             ))}

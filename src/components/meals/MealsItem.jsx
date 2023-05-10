@@ -7,17 +7,15 @@ export const MealsItem = ({ meal }) => {
   const context = useContext(CartContext);
 
   function addProduct(amount) {
-    const data = {
-      title: meal.title,
-      description: meal.description,
-      price: meal.price,
-      amount: +amount,
-      id:meal.id
-    };
-    context.addItem(data);
+    // const data = {
+    //   title: meal.title,
+    //   description: meal.description,
+    //   price: meal.price,
+    //   amount: +amount,
+    //   id:meal.id
+    // };
+    context.addItem(meal._id, +amount);
   }
-
-
 
   return (
     <Container>

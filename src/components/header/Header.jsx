@@ -5,11 +5,12 @@ import { CartContext } from "../../store/cart-context";
 
 export const Header = ({ onToggle }) => {
   const context = useContext(CartContext);
+  console.log(context);
   return (
     <header>
       <Container>
         <h1>ReactMeals </h1>
-        <OrderBasket   onToggle={onToggle}> Your Сart</OrderBasket>
+        <OrderBasket onToggle={onToggle}> Your Сart</OrderBasket>
       </Container>
     </header>
   );
@@ -47,5 +48,4 @@ const Container = styled.div`
       transform: scale(1);
     }
   }
- 
 `;

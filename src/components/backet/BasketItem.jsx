@@ -22,13 +22,13 @@ export const BasketItem = ({ title, price, amount, id }) => {
             variant="outLine"
             borderRadius="squared"
             icon={<MinesIcon />}
-            onClick={()=>decrementAmountHandler(id)}
+            onClick={() => decrementAmountHandler(id, amount-1)}
           ></Button>
           <Button
             variant="outLine"
             borderRadius="squared"
             icon={<PlusIcon />}
-            onClick={()=> incrementAmountHandler(id)}
+            onClick={() => incrementAmountHandler(id, amount)}
           ></Button>
         </ButtonBlock>
       </Content>

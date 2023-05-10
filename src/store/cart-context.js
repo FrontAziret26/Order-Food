@@ -1,82 +1,131 @@
-
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 export const CartContext = createContext({
   items: [],
   totalAmount: 0,
 });
 const cartReducer = (state, action) => {
+  if (action.type === "GET_BASKET") {
+    return (state = action.payload);
+  }
   if (action.type === "ADD") {
-    const isExist = state.find((item) => item.title === action.payload.title);
-    if (!state.length) {
-      return [action.payload];
-    }
-    if (!isExist) {
-      return [...state, action.payload];
-    }
-    const updatedItems = state.map((item) => {
-      if (item.title === action.payload.title) {
-        return {
-          ...item,
-          amount: item.amount + action.payload.amount,
-        };
-      }
-      return item;
-    });
-    return [...updatedItems];
+    return (state = action.payload);
   }
+
   if (action.type === "INCREMENT") {
-    const updatedIncItem = state.map((item) => {
-      if (item.id === action.payload) {
-        return {
-          ...item,
-          amount: item.amount + 1,
-        };
-      }
-      return item;
-    });
-    return updatedIncItem;
+    return (state = action.payload);
   }
+
   if (action.type === "DECREMENT") {
-    const updatedDecItem = state.map((item) => {
-      if (item.id === action.payload) {
-        return {
-          ...item,
-          amount: item.amount - 1,
-          
-        };
-      }
-      return item;
-    });
-    return updatedDecItem;
+    return (state = action.payload);
   }
   return state;
 };
- const CardProvider = ({ children }) => {
+const CardProvider = ({ children }) => {
   const [cartState, dispatch] = useReducer(cartReducer, []);
-  console.log(cartState);
-  const addItemToCartHandler = (item) => {
-    dispatch({ type: "ADD", payload: item });
+
+  const addItem = async (id, amount) => {
+    const BASE_URL =
+      "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
+
+    const response = await fetch(`${BASE_URL}/foods/${id}/addToBasket`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", UserID: "Aziret" },
+      body: JSON.stringify({ amount: amount }),
+    });
+    const data = await response.json();
+
+    dispatch({ type: "ADD", payload: data.items });
   };
-  const incrementAmountHandler = (id) => {
-    dispatch({ type: "INCREMENT", payload: id });
+
+  const getBasket = async () => {
+    const BASE_URL =
+      "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
+
+    const response = await fetch(`${BASE_URL}/basket`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        UserID: "Aziret",
+      },
+    });
+
+    const data = await response.json();
+
+    dispatch({ type: "GET_BASKET", payload: data.data.items });
   };
-  const decrementAmountHandler = (id) => {
-    dispatch({ type: "DECREMENT", payload: id });
+
+  useEffect(() => {
+    getBasket();
+  }, []);
+
+  const incrementAmountHandler = async (id, amount) => {
+    const BASE_URL =
+      "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
+
+    const response = await fetch(`${BASE_URL}/basketItem/${id}/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        UserID: "Aziret",
+      },
+      body: JSON.stringify({ amount: amount + 1 }),
+    });
+
+    const data = await response.json();
+    dispatch({ type: "INCREMENT", payload: data.data.items });
   };
-  const orderAmount = cartState.reduce(
+
+  const decrementAmountHandler = async (id, amount) => {
+    if (amount !== 0) {
+      const BASE_URL =
+        "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
+
+      const response = await fetch(`${BASE_URL}/basketItem/${id}/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          UserID: "Aziret",
+        },
+        body: JSON.stringify({ amount: amount }),
+      });
+
+      const data = await response.json();
+      dispatch({ type: "DECREMENT", payload: data.data.items });
+      getBasket();
+    } else {
+      const BASE_URL =
+        "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
+
+      const response = await fetch(`${BASE_URL}/basketItem/${id}/delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          UserID: "Aziret",
+        },
+        body: JSON.stringify({ amount: amount }),
+      });
+
+      const data = await response.json();
+      dispatch({ type: "DECREMENT", payload: data.data.items });
+    }
+  };
+
+  const orderAmount = cartState?.reduce(
     (prev, current) => prev + current.amount,
     0
   );
+
   const getTotalAmount = () => {
-    return cartState.reduce(
+    return cartState?.reduce(
       (sum, { price, amount }) => sum + amount * price,
       0
     );
   };
   const cartValue = {
-    cartItems: cartState,
+    // cartItems:
+    cartState: cartState,
     totalAmount: orderAmount,
-    addItem: addItemToCartHandler,
+    addItem,
     incrementAmountHandler,
     decrementAmountHandler,
     getTotalAmount,
@@ -86,5 +135,4 @@ const cartReducer = (state, action) => {
   );
 };
 
-
-export default CardProvider
+export default CardProvider;
