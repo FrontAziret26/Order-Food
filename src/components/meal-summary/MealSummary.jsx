@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 import summaryImage from "../../assets/images/summaryImage.png"
-export const MealSummary = () => {
+ const MealSummary = () => {
   return (
     <Container>
       <Image src={summaryImage} alt="summary" />
     </Container>
   )
 }
+export default memo(MealSummary)
 
 
 const Container = styled.div`

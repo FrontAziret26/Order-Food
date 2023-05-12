@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Header } from "./components/header/Header";
-import { MealSummary } from "./components/meal-summary/MealSummary";
-import { Meals } from "./components/meals/Meals";
+import  MealSummary  from "./components/meal-summary/MealSummary";
+import  Meals  from "./components/meals/Meals";
 import { Basket } from "./components/backet/Basket";
 import CardProvider from "./store/cart-context";
 

@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import styled from "styled-components";
 import { MealSummaryCard } from "./MealSummaryCard";
 import { MealsItem } from "./MealsItem";
-
-export const Meals = () => {
+ const Meals = () => {
   const [meals,setMeals]=useState()
   const BASE_URL =
     "http://ec2-35-156-167-238.eu-central-1.compute.amazonaws.com:5500/api/v1";
@@ -27,7 +26,7 @@ export const Meals = () => {
     </>
   );
 };
-
+export default memo(Meals)
 const Container = styled.div`
   background-color: #fff;
   width: 80%;

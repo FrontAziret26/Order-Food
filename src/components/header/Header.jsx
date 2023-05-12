@@ -4,8 +4,7 @@ import { OrderBasket } from "./OrderBasket";
 import { CartContext } from "../../store/cart-context";
 
 export const Header = ({ onToggle }) => {
-  const context = useContext(CartContext);
-  console.log(context);
+  // const context = useContext(CartContext);
   return (
     <header>
       <Container>
